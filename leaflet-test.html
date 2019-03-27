@@ -1,0 +1,57 @@
+<!doctype html>
+<html>
+<head>
+<meta charset='utf-8' />
+<title>introduction to leaflet</title>
+
+<link rel="stylesheet" href="leaflet.css"/>
+
+</head>
+<body>
+
+<div id='mapid' style="width: 600px; height: 400px;"</div>
+
+<script src='leaflet.js'></script>
+
+<script>
+var map = L.map('mapid').setView([34, -118], 13);
+
+L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(map);
+
+fetch('https://gbfs.bcycle.com/bcycle_lametro/station_information.json')
+    .then(function(response) {
+        return response.json();
+    })
+    .then(function(myJson) {
+        console.log(JSON.stringify(myJson));
+        var stations = myJson["data"]["Stations"]
+        console.log(stations)
+
+        for (var i = 0; i < stations.length; i++) {
+
+            marker = new L.marker([stations[i].lat,stations[i].lon])
+                .bindPopup(stations[i].station_id)
+                .addTo(map);
+
+            /*
+            var marker = L.marker([stations[i].lat,stations[i].lon]).addTo(map);
+            marker.bindPopup(stations[i].station_id);
+            console.log(stations[i].station_id);
+            */
+        }
+
+    });
+
+/*const userAction = async () => {
+    const response = await fetch('https://gbfs.bcycle.com/bcycle_lametro/station_information.json');
+    const myJson = await response.json();
+    alert(myJson)
+    var marker = L.marker([34,-118]).addTo(map)
+}
+*/
+
+var marker = L.marker([34,-118]).addTo(map)
+</script>
+
+</body>
+</html>

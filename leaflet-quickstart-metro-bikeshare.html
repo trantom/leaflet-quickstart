@@ -1,0 +1,76 @@
+<!doctype html>
+<html>
+<head>
+<meta charset='utf-8' />
+<title>introduction to leaflet</title>
+
+<link rel="stylesheet" href="leaflet.css"/>
+
+</head>
+<body>
+
+<div id='mapid' style="width: 800px; height: 600px;"</div>
+
+<script src='leaflet.js'></script>
+
+<script>
+
+// Define Urls and attribution links with <a> tags
+var osmUrl = 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png';
+var osmAttrib = '<a href="http://openstreetmap.org">OpenStreetMap</a>'
+
+var cartoUrl = 'http://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}.png';
+var cartoAttrib = '<a href="http://cartodb.com/attributions">CartoDB</a>';
+
+var stamenUrl = 'http://stamen-tiles-{s}.a.ssl.fastly.net/toner/{z}/{x}/{y}.png';
+var stamenAttrib = '<a href="http://stamen.com">Stamen Design</a>'
+
+var osmMap = L.tileLayer(osmUrl, {attribution: osmAttrib});
+var cartoMap = L.tileLayer(cartoUrl, {attribution: cartoAttrib});
+var stamenMap = L.tileLayer(stamenUrl, {attribution: stamenAttrib//,
+    //subdomains: 'abcd',
+    //minZoom: 0,
+    //maxZoom: 20,
+    //ext: 'png'
+});
+
+// Create map instance
+var map = L.map('mapid', {layers: [osmMap]}).setView([34.047899, -118.259194], 10);
+
+
+// Create objects to store layers
+var baseMaps = {
+    "OpenStreetMap": osmMap,
+    "CartoDB DarkMatter": cartoMap,
+    "Stamen Toner": stamenMap
+};
+
+// Add layers to map
+L.control.layers(baseMaps).addTo(map);
+
+
+
+// Use fetch API compatible with certain browsers to get json
+
+fetch('https://gbfs.bcycle.com/bcycle_lametro/station_information.json')
+    .then(function(response) {
+        return response.json();
+    })
+    .then(function(myJson) {
+        //console.log(JSON.stringify(myJson));
+        var stations = myJson["data"]["Stations"]
+        console.log(stations)
+
+        for (var i = 0; i < stations.length; i++) {
+
+            marker = new L.marker([stations[i].lat,stations[i].lon])
+                .bindPopup(stations[i].station_id)
+                .addTo(map);
+        }
+
+    });
+
+</script>
+
+</body>
+</html>
