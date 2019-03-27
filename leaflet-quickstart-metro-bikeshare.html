@@ -64,7 +64,7 @@ fetch('https://gbfs.bcycle.com/bcycle_lametro/station_information.json')
         for (var i = 0; i < stations.length; i++) {
 
             marker = new L.marker([stations[i].lat,stations[i].lon])
-                .bindPopup(stations[i].station_id)
+                .bindPopup(stations[i].name)
                 .addTo(map);
         }
 
