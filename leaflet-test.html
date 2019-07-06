@@ -24,7 +24,7 @@ fetch('https://gbfs.bcycle.com/bcycle_lametro/station_information.json')
     })
     .then(function(myJson) {
         console.log(JSON.stringify(myJson));
-        var stations = myJson["data"]["Stations"]
+        var stations = myJson["data"]["stations"]
         console.log(stations)
 
         for (var i = 0; i < stations.length; i++) {
